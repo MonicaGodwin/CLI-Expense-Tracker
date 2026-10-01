@@ -14,4 +14,6 @@ if command == "Add":
     if len(sys.argv) < 3:
         print("Usage: <main.py> <Add> <Item> <amount>")
         sys.exit()
-    
+    elif len(sys.argv) > 3:
+        print("Too many arguments")
+        sys.exist()
