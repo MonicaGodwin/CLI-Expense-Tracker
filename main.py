@@ -33,9 +33,9 @@ if command == "Add":
         print("Too many arguments")
         sys.exist()
 
-    item_id = len(expense) + 1
     new_item = sys.argv[2]
     item_amount = sys.argv[3]
+    item_id = len(expense) + 1
     dated = time.ctime
     new_expense = {
         "id": item_id,
