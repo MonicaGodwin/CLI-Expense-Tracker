@@ -1,5 +1,6 @@
 import os
 import sys
+import csv
 
 if not os.path.exists("file.csv"):
     task = []
@@ -17,3 +18,5 @@ if command == "Add":
     elif len(sys.argv) > 3:
         print("Too many arguments")
         sys.exist()
+    with open("file.csv", "w") as data:
+        writer = csv.writer(data)
