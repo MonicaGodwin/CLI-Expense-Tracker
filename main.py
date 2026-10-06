@@ -1,7 +1,4 @@
-import os
-import sys
-import csv
-import time
+import os, sys, csv, datetime
 
 expenses = {
     "id": "Id",
@@ -11,32 +8,26 @@ expenses = {
 }
 
 if not os.path.exists("file.csv"):
-    expense = []
     with open("file.csv", "w") as file:
         writer = csv.writer(file)
-
-if len(sys.argv) < 2:
-    print("Usage: <main.py> add|update|delete|View")
-    sys.exit()
-elif len(sys.argv) > 2:
-    print("Too many arguments")
-    sys.exit()
+    
+expense = []
 
 command = sys.argv[1].lower()
 
 
-if command == "Add":
-    if len(sys.argv) < 3:
+if command == "add":
+    if len(sys.argv) < 4:
         print("Usage: <main.py> <Add> <Item> <amount>")
         sys.exit()
-    elif len(sys.argv) > 3:
+    elif len(sys.argv) > 4:
         print("Too many arguments")
-        sys.exist()
+        sys.exit()
 
     new_item = sys.argv[2]
     item_amount = sys.argv[3]
     item_id = len(expense) + 1
-    dated = time.ctime
+    dated = datetime.date.today()
     new_expense = {
         "id": item_id,
         "item": new_item,
@@ -44,11 +35,13 @@ if command == "Add":
         "date": dated
     }
     expense.append(new_expense)
-    with open("file.csv", "w") as data:
+    with open("file.csv", "a") as data:
         writer = csv.DictWriter(
             data,
             fieldnames=["id", "item", "amount", "date"]
         )
-        writer.writeheader()
-        writer.writerow(new_expense)
+        if data.tell() == 0:
+            writer.writeheader()
+        for row in expense:
+            writer.writerow(row)
     print("Expense added successfully")
