@@ -84,3 +84,79 @@ def update_expenses():
                 writer.writerow(row)
     else:
         print("expense id not found")
+
+
+def delete_expenses():
+    if len(sys.argv) < 3:
+        print("USage:<main.py> <delete> <id>") 
+        sys.exit()
+    elif len(sys.argv) > 3:
+        print("Too many arguments")
+        sys.exit()
+    deleted = False
+    item_id = sys.argv[2]
+    for expense in expenses:
+        if expense["id"] == item_id:
+            expenses.remove(expense)
+            deleted = True
+            print("Expense deleted")
+    if deleted:
+        for number, exp in enumerate(expenses, start=1):
+            exp["id"] = number
+        with open("file.csv", "w") as file:
+            writer = csv.DictWriter(
+                file,
+                fieldnames=["id", "item", "amount", "date"]
+            )
+            writer.writeheader()
+            for rows in expenses:
+                writer.writerow(rows)
+    else:
+        print("Item id not found")
+
+def view_all_expenses():
+    if len(sys.argv) < 2:
+        print("Usage: <main.py> <view>")
+        sys.exit()
+    if len(sys.argv) > 2:
+        print("Too many arguments")
+        sys.exit()
+    if len(expense) == 0:
+        print("No expenses to display")
+    for expense in expenses:
+        print(
+            f"{expense["id"]} - {expense["item"]} - {expense["amount"]} - {expense["date"]}"
+        )
+
+def total_expenses():
+    if len(sys.argv) < 2:
+        print("Usage: <main.py> <summary>")
+        sys.exit()
+    elif len(sys.argv) > 2:
+        print("Too many arguments")
+        sys.exit()
+    total_amount = 0
+    for expense in expenses:
+        amount = expense["amount"]
+        num = int(amount)
+        total_amount += num
+    print(
+        f"Total expenses: ₦{total_amount}"
+        )
+
+def view_category():
+    if len(sys.argv) < 3:
+        print("Usage: <main.py> <category> <month>")
+        sys.exit()
+    elif len(sys.argv) > 3:
+        print("Too many arguments") 
+        sys.exit()
+    category = sys.argv[2]
+    total_amount = 0
+    for expense in expenses:
+        if expense["date"] == category:
+            num = int(expense)
+            total_amount += num
+    print(
+        f"Total expenses for {category}: {total_amount}"
+    )
