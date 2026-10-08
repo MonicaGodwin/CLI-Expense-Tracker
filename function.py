@@ -37,6 +37,7 @@ def add_expenses():
     if new_item:
         option = input(
             f"\n=== SELECT CATEGORY TO ADD ITEM TO ===\n\n"
+            f"Select option(1-3)\n"
             f"1. Food\n"
             f"2. Clothing\n"
             f"3. Utilities\n\n"
@@ -50,7 +51,7 @@ def add_expenses():
             category = "Utilities"
         else:
             print("please select a category to add item")
-            
+            sys.exit()
             
     item_id = len(expenses) + 1
     dated = datetime.date.today()
