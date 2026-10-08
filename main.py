@@ -22,4 +22,6 @@ elif command == "summary":
 
 elif command == "category":
     func.view_category()
-    
+
+elif command == "month":
+    func.view_month()

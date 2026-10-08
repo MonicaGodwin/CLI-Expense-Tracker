@@ -167,7 +167,7 @@ def total_expenses():
 
 def view_category():
     if len(sys.argv) < 3:
-        print("Usage: <main.py> <category> <month>")
+        print("Usage: <main.py> <category>")
         sys.exit()
     elif len(sys.argv) > 3:
         print("Too many arguments") 
@@ -183,3 +183,17 @@ def view_category():
     print(
         f"Total expenses for {category} category: {total_amount}"
     )
+
+def view_month():
+    if len(sys.argv) < 3:
+        print("Usage: <main.py> <month> <month_num>")
+        sys.exit()
+    elif len(sys.argv) > 3:
+        print("Too many arguments") 
+        sys.exit()
+    for expense in expenses:
+        dated = expense["date"]
+        splitted = dated.split("-")
+        if sys.argv[2] == splitted[1]:
+            print(f"{expense['id']}-{expense['item']}-{expense['amount']}-{expense['date']}-{expense['category']}")
+        
