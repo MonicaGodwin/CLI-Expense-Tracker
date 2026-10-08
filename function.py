@@ -44,11 +44,11 @@ def add_expenses():
         )   
         category = ""
         if option == "1":
-            category = "Food"
+            category = "food"
         elif option == "2":
-            category = "Clothing"
+            category = "clothing"
         elif option == "3":
-            category = "Utilities"
+            category = "utilities"
         else:
             print("please select a category to add item")
             sys.exit()
@@ -175,9 +175,11 @@ def view_category():
     category = sys.argv[2]
     total_amount = 0
     for expense in expenses:
-        if expense["date"] == category:
-            num = int(expense)
+        if expense["category"].lower() == category.lower():
+            print(f"{expense['id']}-{expense['item']}-{expense['amount']}-{expense['date']}-{expense['category']}")
+            amount = expense["amount"]
+            num = int(amount)
             total_amount += num
     print(
-        f"Total expenses for {category}: {total_amount}"
+        f"Total expenses for {category} category: {total_amount}"
     )
