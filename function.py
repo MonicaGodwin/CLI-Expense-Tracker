@@ -4,7 +4,8 @@ expenses_field = {
     "id": "Id",
     "item": "Item",
     "amount": "Amount",
-    "date": "Date"
+    "date": "Date",
+    "category": "Category"
 }
 
 
@@ -33,19 +34,38 @@ def add_expenses():
 
     new_item = sys.argv[2]
     item_amount = sys.argv[3]
+    if new_item:
+        option = input(
+            f"\n=== SELECT CATEGORY TO ADD ITEM TO ===\n\n"
+            f"1. Food\n"
+            f"2. Clothing\n"
+            f"3. Utilities\n\n"
+        )   
+        category = ""
+        if option == "1":
+            category = "Food"
+        elif option == "2":
+            category = "Clothing"
+        elif option == "3":
+            category = "Utilities"
+        else:
+            print("please select a category to add item")
+            
+            
     item_id = len(expenses) + 1
     dated = datetime.date.today()
     new_expense = {
         "id": item_id,
         "item": new_item,
         "amount": item_amount,
-        "date": dated
+        "date": dated,
+        "category": category
     }
     expenses.append(new_expense)
     with open("file.csv", "a") as data:
         writer = csv.DictWriter(
             data,
-            fieldnames=["id", "item", "amount", "date"]
+            fieldnames=["id", "item", "amount", "date", "category"]
         )
         if data.tell() == 0:
             writer.writeheader()

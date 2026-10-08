@@ -1,3 +1,2 @@
-id,item,amount,date
-1,router,20000,2026-10-07
-2,marriage contribution,3000,2026-10-07
+id,item,amount,date,category
+1,Beans,2000,2026-10-08,Food
