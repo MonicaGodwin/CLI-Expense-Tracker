@@ -205,6 +205,14 @@ def view_month():
         f"\nTotal expenses for month {month_num}: {total}"
     )
 
-budget = 0
 def set_budget():
-    
+    budget = int(input("Enter Your budget here: "))
+    total = 0
+    for expense in expenses:
+        amount = int(expense["amount"])
+        total += amount
+    percentage = (total / budget) * 100
+    if total == percentage:
+        print("Your budget is almost finished!")
+    elif total > budget:
+        print("You have exceeded your budget")
