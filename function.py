@@ -191,9 +191,20 @@ def view_month():
     elif len(sys.argv) > 3:
         print("Too many arguments") 
         sys.exit()
+    total = 0
     for expense in expenses:
         dated = expense["date"]
         splitted = dated.split("-")
-        if sys.argv[2] == splitted[1]:
+        month_num = splitted[1]
+        if sys.argv[2] == month_num:
             print(f"{expense['id']}-{expense['item']}-{expense['amount']}-{expense['date']}-{expense['category']}")
-        
+        amount = expense["amount"]
+        num = int(amount)
+        total += num
+    print(
+        f"\nTotal expenses for month {month_num}: {total}"
+    )
+
+budget = 0
+def set_budget():
+    
