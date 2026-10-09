@@ -31,9 +31,12 @@ def add_expenses():
     elif len(sys.argv) > 4:
         print("Too many arguments")
         sys.exit()
-
-    new_item = sys.argv[2]
-    item_amount = sys.argv[3]
+    try:
+        new_item = str(sys.argv[2])
+        item_amount = int(sys.argv[3])
+    except ValueError:
+        print("Invalid input: item must be a string and amount should be an integer")
+        sys.exit()
     if new_item:
         option = input(
             f"\n=== SELECT CATEGORY TO ADD ITEM TO ===\n\n"
@@ -59,14 +62,14 @@ def add_expenses():
         "id": item_id,
         "item": new_item,
         "amount": item_amount,
-        "date": dated,
-        "category": category
+        "category": category,
+        "date": dated
     }
     expenses.append(new_expense)
     with open("file.csv", "a") as data:
         writer = csv.DictWriter(
             data,
-            fieldnames=["id", "item", "amount", "date", "category"]
+            fieldnames=["id", "item", "amount", "category", "date"]
         )
         if data.tell() == 0:
             writer.writeheader()
@@ -84,8 +87,11 @@ def update_expenses():
         sys.exit()
     update = False
     item_id = sys.argv[2]
-    item = sys.argv[3]
-    item_amount = sys.argv[4]
+    try:
+        item = sys.argv[3]
+        item_amount = sys.argv[4]
+    except ValueError:
+        print("Invalid input: item must be a string and amount should be an integer")
     if item:
         option = input(
             f"\n=== SELECT CATEGORY TO UPDATE ITEM ===\n\n"
@@ -109,15 +115,15 @@ def update_expenses():
         if expense["id"] == item_id:
             expense["item"] = item
             expense["amount"] = item_amount
-            expense["date"] = dated
             expense["category"] = category
+            expense["date"] = dated
             update = True
             print("expense updated")
     if update:
         with open("file.csv", "w") as updated_file:
             writer = csv.DictWriter(
                 updated_file,
-                fieldnames=["id", "item", "amount", "date", "category"]
+                fieldnames=["id", "item", "amount", "category", "date"]
             )
             writer.writeheader()
             for row in expenses:
@@ -146,7 +152,7 @@ def delete_expenses():
         with open("file.csv", "w") as file:
             writer = csv.DictWriter(
                 file,
-                fieldnames=["id", "item", "amount", "date"]
+                fieldnames=["id", "item", "amount", "category", "date"]
             )
             writer.writeheader()
             for rows in expenses:
@@ -165,7 +171,7 @@ def view_all_expenses():
         print("No expenses to display")
     for expense in expenses:
         print(
-            f"{expense['id']} - {expense['item']} - {expense['amount']} - {expense['date']}"
+            f"{expense['id']} - {expense['item']} - {expense['amount']} - {expense['category']} - {expense['date']}"
         )
 
 def total_expenses():
@@ -195,7 +201,7 @@ def view_category():
     total_amount = 0
     for expense in expenses:
         if expense["category"].lower() == category.lower():
-            print(f"{expense['id']}-{expense['item']}-{expense['amount']}-{expense['date']}-{expense['category']}")
+            print(f"{expense['id']}-{expense['item']}-{expense['amount']}-{expense['category']}-{expense['date']}")
             amount = expense["amount"]
             num = int(amount)
             total_amount += num
@@ -211,6 +217,7 @@ def view_month():
         print("Too many arguments") 
         sys.exit()
     total = 0
+    found = False
     for expense in expenses:
         dated = expense["date"]
         splitted = dated.split("-")
@@ -220,37 +227,41 @@ def view_month():
             amount = expense["amount"]
             num = int(amount)
             total += num
+            found = True
+    if not found:
+        print("Month not found in expense")
+        sys.exit()
     print(
         f"\nTotal expenses for month {month_num}: {total}"
     )
 
-def set_budget():
-    try:
-        budget = int(input("Enter Your budget here: "))
-    except ValueError:
-        print("Must be an integer")
-        sys.exit()
-    if budget <= 0:
-        print("Budget should be greater than zero")
-        return
-    total = 0
-    for expense in expenses:
-        try:
-            amount = int(expense["amount"])
-            total += amount
-        except ValueError:
-            print("Must be an integer")
-    percentage = (total / budget) * 100
-    print(
-        f"Total expenses: ₦{total}\n"
-        f"Budget: ₦{budget}\n"
-        f"Budget used: {percentage:.0f}%"
-    )
+# def set_budget():
+#     try:
+#         budget = int(input("Enter Your budget here: "))
+#     except ValueError:
+#         print("Must be an integer")
+#         sys.exit()
+#     if budget <= 0:
+#         print("Budget should be greater than zero")
+#         return
+#     total = 0
+#     for expense in expenses:
+#         try:
+#             amount = int(expense["amount"])
+#             total += amount
+#         except ValueError:
+#             print("Must be an integer")
+#     percentage = (total / budget) * 100
+#     print(
+#         f"Total expenses: ₦{total}\n"
+#         f"Budget: ₦{budget}\n"
+#         f"Budget used: {percentage:.0f}%"
+#     )
 
-    if total > budget:
-        print("You have exceeded your budget")
-    elif percentage >= 80:
-        print(f"Warning: You've spent {percentage:.0f}% of your budget")
-    else:
-        print("Still within the budget")
+#     if total > budget:
+#         print("You have exceeded your budget")
+#     elif percentage >= 80:
+#         print(f"Warning: You've spent {percentage:.0f}% of your budget")
+#     else:
+#         print("Still within the budget")
    

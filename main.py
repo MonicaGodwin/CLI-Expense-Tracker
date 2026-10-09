@@ -3,6 +3,10 @@ import sys
     
 expenses = []
 
+if len(sys.argv) < 2:
+    print("Usage: <main.py> <add|update|delete|view|summary|category|month>")
+    sys.exit()
+
 command = sys.argv[1].lower()
 
 if command == "add":
