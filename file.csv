@@ -1,7 +1,7 @@
 id,item,amount,date,category
-1,Beans,2000,2026-10-08,Food
+1,Fish,1500,2026-10-09,Food
 2,Rice,4000,2026-10-08,Food
-3,Pad,2000,2026-10-08,Utilities
+3,glasses,1500,2026-10-09,utilities
 4,Asoebi,7500,2026-10-08,Clothing
 5,T-shirt,3500,2026-10-08,Clothing
 6,Nepa-bill,3500,2026-10-08,Utilities

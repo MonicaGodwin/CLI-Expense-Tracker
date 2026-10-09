@@ -86,19 +86,38 @@ def update_expenses():
     item_id = sys.argv[2]
     item = sys.argv[3]
     item_amount = sys.argv[4]
+    if item:
+        option = input(
+            f"\n=== SELECT CATEGORY TO UPDATE ITEM ===\n\n"
+            f"Select option(1-3)\n"
+            f"1. Food\n"
+            f"2. Clothing\n"
+            f"3. Utilities\n\n"           
+        )
+    category = ""
+    if option == "1":
+        category = "food"
+    elif option == "2":
+        category = "clothing"
+    elif option == "3":
+        category = "utilities"
+    else:
+        print("please select a category to add item")
+        sys.exit()
     dated = datetime.date.today()
     for expense in expenses:
         if expense["id"] == item_id:
             expense["item"] = item
             expense["amount"] = item_amount
             expense["date"] = dated
+            expense["category"] = category
             update = True
             print("expense updated")
     if update:
         with open("file.csv", "w") as updated_file:
             writer = csv.DictWriter(
                 updated_file,
-                fieldnames=["id", "item", "amount", "date"]
+                fieldnames=["id", "item", "amount", "date", "category"]
             )
             writer.writeheader()
             for row in expenses:
@@ -142,11 +161,11 @@ def view_all_expenses():
     if len(sys.argv) > 2:
         print("Too many arguments")
         sys.exit()
-    if len(expense) == 0:
+    if len(expenses) == 0:
         print("No expenses to display")
     for expense in expenses:
         print(
-            f"{expense["id"]} - {expense["item"]} - {expense["amount"]} - {expense["date"]}"
+            f"{expense['id']} - {expense['item']} - {expense['amount']} - {expense['date']}"
         )
 
 def total_expenses():
@@ -198,21 +217,40 @@ def view_month():
         month_num = splitted[1]
         if sys.argv[2] == month_num:
             print(f"{expense['id']}-{expense['item']}-{expense['amount']}-{expense['date']}-{expense['category']}")
-        amount = expense["amount"]
-        num = int(amount)
-        total += num
+            amount = expense["amount"]
+            num = int(amount)
+            total += num
     print(
         f"\nTotal expenses for month {month_num}: {total}"
     )
 
 def set_budget():
-    budget = int(input("Enter Your budget here: "))
+    try:
+        budget = int(input("Enter Your budget here: "))
+    except ValueError:
+        print("Must be an integer")
+        sys.exit()
+    if budget <= 0:
+        print("Budget should be greater than zero")
+        return
     total = 0
     for expense in expenses:
-        amount = int(expense["amount"])
-        total += amount
+        try:
+            amount = int(expense["amount"])
+            total += amount
+        except ValueError:
+            print("Must be an integer")
     percentage = (total / budget) * 100
-    if total == percentage:
-        print("Your budget is almost finished!")
-    elif total > budget:
+    print(
+        f"Total expenses: ₦{total}\n"
+        f"Budget: ₦{budget}\n"
+        f"Budget used: {percentage:.0f}%"
+    )
+
+    if total > budget:
         print("You have exceeded your budget")
+    elif percentage >= 80:
+        print(f"Warning: You've spent {percentage:.0f}% of your budget")
+    else:
+        print("Still within the budget")
+   
