@@ -29,3 +29,7 @@ elif command == "category":
 
 elif command == "month":
     func.view_month()
+
+elif command == "budget":
+    func.set_budget()
+    

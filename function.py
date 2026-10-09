@@ -88,10 +88,11 @@ def update_expenses():
     update = False
     item_id = sys.argv[2]
     try:
-        item = sys.argv[3]
-        item_amount = sys.argv[4]
+        item = str(sys.argv[3])
+        item_amount = int(sys.argv[4])
     except ValueError:
         print("Invalid input: item must be a string and amount should be an integer")
+        sys.exit()
     if item:
         option = input(
             f"\n=== SELECT CATEGORY TO UPDATE ITEM ===\n\n"
@@ -192,19 +193,24 @@ def total_expenses():
 
 def view_category():
     if len(sys.argv) < 3:
-        print("Usage: <main.py> <category>")
+        print("Usage: <main.py> <category> <food|clothing|utilities>")
         sys.exit()
     elif len(sys.argv) > 3:
         print("Too many arguments") 
         sys.exit()
     category = sys.argv[2]
+    found = False
     total_amount = 0
     for expense in expenses:
         if expense["category"].lower() == category.lower():
+            found = True
             print(f"{expense['id']}-{expense['item']}-{expense['amount']}-{expense['category']}-{expense['date']}")
             amount = expense["amount"]
             num = int(amount)
             total_amount += num
+    if not found:
+        print(f"No expenses record for {category}")
+        sys.exit()
     print(
         f"Total expenses for {category} category: {total_amount}"
     )
@@ -235,33 +241,40 @@ def view_month():
         f"\nTotal expenses for month {month_num}: {total}"
     )
 
-# def set_budget():
-#     try:
-#         budget = int(input("Enter Your budget here: "))
-#     except ValueError:
-#         print("Must be an integer")
-#         sys.exit()
-#     if budget <= 0:
-#         print("Budget should be greater than zero")
-#         return
-#     total = 0
-#     for expense in expenses:
-#         try:
-#             amount = int(expense["amount"])
-#             total += amount
-#         except ValueError:
-#             print("Must be an integer")
-#     percentage = (total / budget) * 100
-#     print(
-#         f"Total expenses: ₦{total}\n"
-#         f"Budget: ₦{budget}\n"
-#         f"Budget used: {percentage:.0f}%"
-#     )
+def set_budget():
+    if len(sys.argv) < 3:
+        print("Usage: <main.py> <budget> <budget_amount>")
+        sys.exit()
+    elif len(sys.argv) > 3:
+        print("Too many arguments") 
+        sys.exit()
+    try:
+        budget = int(sys.argv[2])
+    except ValueError:
+        print("Must be an integer")
+        sys.exit()
+    if budget <= 0:
+        print("Budget should be greater than zero")
+        return
+    total = 0
+    for expense in expenses:
+        try:
+            amount = int(expense["amount"])
+            total += amount
+        except ValueError:
+            print("Must be an integer")
+    percentage = (total / budget) * 100
+    print(
+        f"Total expenses: ₦{total}\n"
+        f"Budget: ₦{budget}\n"
+        f"Budget used: {percentage:.0f}%"
+    )
 
-#     if total > budget:
-#         print("You have exceeded your budget")
-#     elif percentage >= 80:
-#         print(f"Warning: You've spent {percentage:.0f}% of your budget")
-#     else:
-#         print("Still within the budget")
-   
+    if total > budget:
+        print("You have exceeded your budget")
+    elif percentage >= 80:
+        print(f"Warning: You've spent {percentage:.0f}% of your budget")
+    else:
+        print("Still within the budget")
+
+        
